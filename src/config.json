@@ -9,9 +9,9 @@
         "DB_PORT": "3306"
     },
     "HOST": "iitueduarena.onrender.com",
-    "PROTOCOL": "https",
+    "PROTOCOL": "http",
     "PORT": 0,
-    "STEAMAPIKEY": "4211E53429612D5891C8C501AEA01DDA",
+    "STEAMAPIKEY": "",
     "connect": {
         "show": true,
         "url": "steam://connect/[IP:PORT]?appid=730/[Server password if needed]"
