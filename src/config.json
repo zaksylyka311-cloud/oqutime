@@ -9,8 +9,8 @@
         "DB_PORT": "3306"
     },
     "HOST": "iitueduarena.onrender.com",
-    "PROTOCOL": "http",
-    "PORT": 27075,
+    "PROTOCOL": "https",
+    "PORT": 0,
     "STEAMAPIKEY": "4211E53429612D5891C8C501AEA01DDA",
     "connect": {
         "show": true,
