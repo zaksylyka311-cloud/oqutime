@@ -1,0 +1,218 @@
+<%- include('./partials/header') %>
+    
+    <!-- Modal -->
+    <div class="modal fade" id="patternFloat" tabindex="-1" aria-labelledby="patternFloatLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content" style="background-color: transparent !important;">
+                <div class="modal-header bg-nav text-light border-dark">
+                    <h5 class="modal-title" id="patternFloatLabel"><%= lang.floatPattern %></h5>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body bg-color d-flex flex-column text-light">
+                    <img id="modalImg" class="mx-auto" src="/images/econ/default_generated/weapon_knife_gut_hy_webs_light_png.png" width="40%">
+                    <h5 class="mx-auto"><span id="modalWeapon">Gut knife</span> | <span id="modalPaint">Fade</span></h5>
+                    <div class="form-outline mx-auto mb-2">
+                        <label class="form-label m-0" for="float"><%= lang.float %></label>
+                        <input type="range" id="floatSlider" class="slider" min="0" max="1" step="0.000001" value="0.000001" data-bs-theme="dark">
+                        <input type="number" id="float" class="form-control" min="0" max="1" step="0.000001" value="0.000001" data-bs-theme="dark">
+                        <p id="floatText" class="text-center m-0"><%= lang.factoryNew %></p>
+                    </div>
+                    <div class="btn-group mx-auto mb-2">
+                        <button onclick="setFloat(0.0001)" class="btn btn-primary floatButton"><%= lang.factoryNewCode %></button>
+                        <button onclick="setFloat(0.07)" class="btn btn-primary floatButton"><%= lang.minimalWearCode %></button>
+                        <button onclick="setFloat(0.15)" class="btn btn-primary floatButton"><%= lang.fieldTestedCode %></button>
+                        <button onclick="setFloat(0.38)" class="btn btn-primary floatButton"><%= lang.wellWornCode %></button>
+                        <button onclick="setFloat(0.45)" class="btn btn-primary floatButton"><%= lang.battleScarredCode %></button>
+                    </div>
+                    <div class="form-outline mx-auto mt-3">
+                        <label class="form-label m-0" for="pattern">Pattern</label>
+                        <input type="number" id="pattern" class="form-control" placeholder="Pattern" value="0" data-bs-theme="dark">
+                    </div>
+                </div>
+                <div class="modal-footer bg-nav text-light border-dark d-flex justify-content-center">
+                    <button type="button" class="btn btn-outline-primary" onclick="changeParams()" id="modalButton"><%= lang.change %></button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    
+
+    <%- include('./partials/navbar') %>
+
+    <% if (typeof user == 'undefined') { %>
+        <h5 class="text-center mt-4 text-white"><%= lang.needLogin %> <a class="text-accent" href="<%= subdir %>api/auth/steam"><%= lang.viaSteam %></a></h5>
+    <% } else { %>
+
+    <div class="container text-light mt-3">
+        <div class="d-block d-lg-none list-group list-group-horizontal position-relative overflow-auto d-flex justify-content-between bg-nav p-2 rounded">
+            <button onclick="showKnives()" id="sideBtnKnives" class="btn btn-outline-primary d-flex my-1 mx-1 align-items-center" data-type="sideBtn" data-btn-type="knives">
+                <img src="icons/weapon_knife_karambit.svg" style="filter: invert();" width="35px">
+                <p class="p-0 m-0 mx-auto"><small><%= lang.sideMenu.knives %></small></p>
+            </button>
+
+            <button onclick="showGloves()" id="sideBtnGloves" class="btn btn-outline-primary d-flex my-1 mx-1 align-items-center" data-type="sideBtn" data-btn-type="gloves">
+                <i class="fa-solid fa-mitten ms-1 me-2 my-auto"></i>
+                <p class="p-0 m-0 mx-auto"><small><%= lang.sideMenu.gloves %></small></p>
+            </button>
+
+            <button onclick="showMusics()" id="sideBtnMusics" class="btn btn-outline-primary d-flex my-1 mx-1 align-items-center" data-type="sideBtn" data-btn-type="musics">
+                <i class="fa-solid fa-music ms-1 me-2 my-auto"></i>
+                <p class="p-0 m-0 mx-auto"><small><%= lang.sideMenu.musics %></small></p>
+            </button>
+
+
+            <button onclick="showPistols()" id="sideBtnPistols" class="btn btn-outline-primary d-flex my-1 mx-1 align-items-center" data-type="sideBtn" data-btn-type="pistols">
+                <img src="icons/weapon_deagle.svg" style="filter: invert();" width="35px">
+                <p class="p-0 m-0 mx-auto"><small><%= lang.sideMenu.pistols %></small></p>
+            </button>
+
+            <button onclick="showRifles()" id="sideBtnRifles" class="btn btn-outline-primary d-flex my-1 mx-1 align-items-center" data-type="sideBtn" data-btn-type="rifles">
+                <img src="icons/weapon_ak47.svg" style="filter: invert();" width="35px">
+                <p class="p-0 m-0 mx-auto"><small><%= lang.sideMenu.rifles %></small></p>
+            </button>
+
+            <button onclick="showPPs()" id="sideBtnPPs" class="btn btn-outline-primary d-flex my-1 mx-1 align-items-center" data-type="sideBtn" data-btn-type="smgs">
+                <img src="icons/weapon_mac10.svg" style="filter: invert();" width="35px">
+                <p class="p-0 m-0 mx-auto"><small><%= lang.sideMenu.SMGs %></small></p>
+            </button>
+
+            <button onclick="showShotguns()" id="sideBtnShotguns" class="btn btn-outline-primary my-1 mx-1 d-flex align-items-center" data-type="sideBtn" data-btn-type="heavy">
+                <img src="icons/weapon_negev.svg" style="filter: invert();" width="35px">
+                <p class="p-0 m-0 mx-auto"><small><%= lang.sideMenu.heavy %></small></p>
+            </button>
+        </div>
+        <div class="row">
+            <div class="col-2 rounded p-0 d-none d-lg-block">
+                <div class="sticky-top" style="top: 10px;">
+                    <div class="bg-nav rounded p-0 p-2 pb-0">
+                        <button class="pushable" onclick="showKnives()" data-type="sideBtn" data-btn-type="knives">
+                            <span class="shadow"></span>
+                            <span class="edge"></span>
+                            <div class="front d-flex" id="sideBtnKnives">
+                                    <img src="icons/weapon_knife_karambit.svg" class="ms-2" style="filter: invert();" width="35px">
+                                    <p class="m-0 mx-auto"><%= lang.sideMenu.knives %></p>                 
+                            </div>
+                        </button>
+
+                        <button class="pushable" onclick="showGloves()" data-type="sideBtn" data-btn-type="gloves">
+                            <span class="shadow"></span>
+                            <span class="edge"></span>
+                            <div class="front d-flex" id="sideBtnGloves">
+                                    <i class="fa-solid fa-mitten ms-3 me-2 my-auto"></i>
+                                    <p class="m-0 mx-auto"><%= lang.sideMenu.gloves %></p>                 
+                            </div>
+                        </button>
+
+                        <button class="pushable" onclick="showMusics()" data-type="sideBtn" data-btn-type="musics">
+                            <span class="shadow"></span>
+                            <span class="edge"></span>
+                            <div class="front d-flex" id="sideBtnMusics">
+                                    <i class="fa-solid fa-music ms-3 me-2 my-auto"></i>
+                                    <p class="m-0 mx-auto"><%= lang.sideMenu.musics %></p>                 
+                            </div>
+                        </button>
+
+                        <button class="pushable" onclick="showPistols()" data-type="sideBtn" data-btn-type="pistols">
+                            <span class="shadow"></span>
+                            <span class="edge"></span>
+                            <div class="front d-flex" id="sideBtnPistols">
+                                    <img src="icons/weapon_deagle.svg" class="ms-2" style="filter: invert();" width="35px">
+                                    <p class="m-0 mx-auto"><%= lang.sideMenu.pistols %></p>                 
+                            </div>
+                        </button>
+
+                        <button class="pushable" onclick="showRifles()" data-type="sideBtn" data-btn-type="rifles">
+                            <span class="shadow"></span>
+                            <span class="edge"></span>
+                            <div class="front d-flex" id="sideBtnRifles">
+                                    <img src="icons/weapon_ak47.svg" class="ms-2" style="filter: invert();" width="35px">
+                                    <p class="m-0 mx-auto"><%= lang.sideMenu.rifles %></p>                 
+                            </div>
+                        </button>
+        
+                        <button class="pushable" onclick="showPPs()" data-type="sideBtn" data-btn-type="smgs">
+                            <span class="shadow"></span>
+                            <span class="edge"></span>
+                            <div class="front d-flex" id="sideBtnPPs">
+                                    <img src="icons/weapon_mac10.svg" class="ms-2" style="filter: invert();" width="35px">
+                                    <p class="m-0 mx-auto"><%= lang.sideMenu.SMGs %></p>                 
+                            </div>
+                        </button>
+
+                        <button class="pushable" onclick="showShotguns()" data-type="sideBtn" data-btn-type="heavy">
+                            <span class="shadow"></span>
+                            <span class="edge"></span>
+                            <div class="front d-flex" id="sideBtnShotguns">
+                                    <img src="icons/weapon_negev.svg" class="ms-2" style="filter: invert();" width="35px">
+                                    <p class="m-0 mx-auto"><%= lang.sideMenu.heavy %></p>                 
+                            </div>
+                        </button>
+
+                        <button class="pushable" onclick="showUtility()" data-type="sideBtn" data-btn-type="utility">
+                            <span class="shadow"></span>
+                            <span class="edge"></span>
+                            <div class="front d-flex" id="sideBtnUtility">
+                                    <i class="fa-solid fa-bolt ms-3 me-2 my-auto"></i>
+                                    <p class="m-0 mx-auto"><%= lang.sideMenu.utility %></p>                 
+                            </div>
+                        </button>
+
+                        <button class="pushable" onclick="showCTAgents()" data-type="sideBtn" data-btn-type="ctAgents">
+                            <span class="shadow"></span>
+                            <span class="edge"></span>
+                            <div class="front d-flex" id="sideBtnCTAgents">
+                                    <i class="fa-solid fa-person-rifle ms-3 me-2 my-auto"></i>
+                                    <p class="m-0 mx-auto"><%= lang.sideMenu.ctAgents %></p>                 
+                            </div>
+                        </button>
+
+                        <button class="pushable" onclick="showTAgents()" data-type="sideBtn" data-btn-type="tAgents">
+                            <span class="shadow"></span>
+                            <span class="edge"></span>
+                            <div class="front d-flex" id="sideBtnTAgents">
+                                    <i class="fa-solid fa-person-rifle ms-3 me-2 my-auto"></i>
+                                    <p class="m-0 mx-auto"><%= lang.sideMenu.tAgents %></p>                 
+                            </div>
+                        </button>
+
+                    </div>
+                    
+                    <!-- <div class="bg-nav rounded p-0 p-2 pb-0 mt-2">
+                        <button class="pushable" onclick="showWorkshop()">
+                            <span class="shadow"></span>
+                            <span class="edge"></span>
+                            <div class="front d-flex align-items-center workshop-btn" id="sideBtnWorkshop">
+                                    <i class="fa-solid fa-gavel fa-lg ms-3 me-2 my-auto"></i>
+                                    <p class="m-0 mx-auto"><%= lang.sideMenu.workshop %></p>                 
+                            </div>
+                        </button>
+                    </div> -->
+
+
+                    <div class="bg-nav rounded p-0 p-2 pb-0 mt-2" style="display: none;" id="myWorkshopSideGroup"></div>
+                </div>
+                
+            </div>
+            <div class="col-mb-12 col-lg-10 mb-5">
+                <div class="row" id="skinsContainer">
+
+                    <h3 class="text-center mt-5"><%= lang.selectCategory %></h3>
+
+                </div>
+            </div>
+        </div>
+    </div>
+    <% } %>
+    
+    <!-- Filler for footer -->
+    <div class="container-fluid py-3">
+        <p class="m-0"></p>
+    </div>
+
+    <div class="container-fluid fixed-bottom bg-nav text-light text-center py-3">
+        <p class="text-decoration-none text-light m-0"><%= config.name %> | <%= new Date().getFullYear();%> </p>
+        <p class="m-0 text-secondary">Made by <a href="https://github.com/L1teD/cs2-WeaponPaints-website" target="_blank" class="text-secondary">@L1te</a> Modify by <a href="https://github.com/SwaggyMacro/cs2-WeaponPaints-Web" target="_blank" class="text-secondary">@SwaggyMacro</a></p>
+    </div>
+
+<%- include('./partials/footer') %>
